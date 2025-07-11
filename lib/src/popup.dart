@@ -197,7 +197,7 @@ class _PopupRoute extends PopupRoute<void> {
   final Curve animationCurve;
 
   static const double _margin = 10;
-  static final Rect _viewportRect = Rect.fromLTWH(
+  Rect _viewportRect = Rect.fromLTWH(
     _margin,
     Screen.statusBar + _margin,
     Screen.width - _margin * 2,
@@ -214,7 +214,7 @@ class _PopupRoute extends PopupRoute<void> {
   final double? contentRadius;
   final BoxDecoration? contentDecoration;
 
-  double _maxHeight = _viewportRect.height;
+  double _maxHeight = 0.0;
   _ArrowDirection _arrowDirection = _ArrowDirection.top;
   double _arrowHorizontal = 0;
   double _scaleAlignDx = 0.5;
@@ -258,6 +258,15 @@ class _PopupRoute extends PopupRoute<void> {
   @override
   TickerFuture didPush() {
     super.offstage = true;
+
+    _viewportRect = Rect.fromLTWH(
+      _margin,
+      Screen.statusBar + _margin,
+      Screen.width - _margin * 2,
+      Screen.height - Screen.statusBar - Screen.bottomBar - _margin * 2,
+    );
+    _maxHeight = _viewportRect.height;
+    
     SchedulerBinding.instance.addPostFrameCallback((_) {
       final childRect = _getRect(_childKey);
       final arrowRect = _getRect(_arrowKey);
